@@ -18,6 +18,5 @@ const MaxWriteLength = 4 * 1024 * 1024
 
 // Config declares the config parameters for store
 type Config struct {
-	dbName string
 	driver DBDriver
 }

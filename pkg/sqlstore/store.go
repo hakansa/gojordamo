@@ -1,6 +1,7 @@
 package sqlstore
 
 import (
+	"database/sql"
 	"strings"
 
 	sq "github.com/Masterminds/squirrel"
@@ -15,9 +16,9 @@ type SQLStore struct {
 }
 
 // New constructs a new instance of SQLStore.
-func New(cfg Config) (*SQLStore, error) {
+func New(cfg Config, origDB *sql.DB) (*SQLStore, error) {
 
-	db := sqlx.NewDb(origDB, pluginAPI.Store.DriverName())
+	db := sqlx.NewDb(origDB, string(cfg.driver))
 
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Question)
 
@@ -31,8 +32,9 @@ func New(cfg Config) (*SQLStore, error) {
 	}
 
 	return &SQLStore{
-		db,
-		builder,
+		cfg:     cfg,
+		db:      db,
+		builder: builder,
 	}, nil
 }
 
