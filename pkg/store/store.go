@@ -1,10 +1,13 @@
-package sqlstore
+package store
 
 import (
+	"database/sql"
+
 	sq "github.com/Masterminds/squirrel"
 	"github.com/influxdata/influxdb/kit/errors"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 )
 
 // SQLStore ..
@@ -38,4 +41,12 @@ func New(cfg Config) (*SQLStore, error) {
 		db:      db,
 		builder: builder,
 	}, nil
+}
+
+// finalizeTransaction ensures a transaction is closed after use, rolling back if not already committed.
+func (sqlStore *SQLStore) finalizeTransaction(tx *sqlx.Tx) {
+	// Rollback returns sql.ErrTxDone if the transaction was already closed.
+	if err := tx.Rollback(); err != nil && err != sql.ErrTxDone {
+		logrus.Errorf("Failed to rollback transaction; err: %v", err)
+	}
 }

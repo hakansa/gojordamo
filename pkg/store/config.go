@@ -1,4 +1,4 @@
-package sqlstore
+package store
 
 // DBDriver declares the db drivers
 type DBDriver string
