@@ -2,8 +2,11 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"io/ioutil"
 	"os"
 
+	"github.com/hakansa/entegrator/pkg/version"
 	"github.com/sirupsen/logrus"
 )
 
@@ -40,5 +43,15 @@ func init() {
 }
 
 func main() {
+	// Show version information
+	if *versionFlag {
+		fmt.Fprintln(os.Stdout, version.Print("license-controller"))
+		os.Exit(0)
+	}
 
+	// Load configuration file
+	_, err := ioutil.ReadFile(*configFileFlag)
+	if err != nil {
+		logrus.WithError(err).Fatal("Could not load configuration")
+	}
 }
