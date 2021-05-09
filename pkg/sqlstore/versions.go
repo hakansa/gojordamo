@@ -7,10 +7,12 @@ import (
 
 const systemDatabaseVersionKey = "DatabaseVersion"
 
+// LatestVersion returns the latest version
 func LatestVersion() semver.Version {
 	return migrations[len(migrations)-1].toVersion
 }
 
+// GetCurrentVersion returns the current version
 func (sqlStore *SQLStore) GetCurrentVersion() (semver.Version, error) {
 	currentVersionStr, err := sqlStore.getSystemValue(sqlStore.db, systemDatabaseVersionKey)
 
@@ -30,6 +32,7 @@ func (sqlStore *SQLStore) GetCurrentVersion() (semver.Version, error) {
 	return currentSchemaVersion, nil
 }
 
+// SetCurrentVersion sets the current version
 func (sqlStore *SQLStore) SetCurrentVersion(e queryExecer, currentVersion semver.Version) error {
 	return sqlStore.setSystemValue(e, systemDatabaseVersionKey, currentVersion.String())
 }

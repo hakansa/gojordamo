@@ -5,7 +5,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-// Migrates runs migrate function for latest version upgrade
+// Migrate runs migrate function for latest version upgrade
 func (sqlStore *SQLStore) Migrate(originalSchemaVersion semver.Version) error {
 	currentSchemaVersion := originalSchemaVersion
 	for _, migration := range migrations {

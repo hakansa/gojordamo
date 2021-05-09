@@ -21,7 +21,7 @@ func New(cfg Config) (*SQLStore, error) {
 
 	db, err := sqlx.Open(string(cfg.Driver), cfg.DataSource)
 	if err != nil {
-		return nil, errors.Wrap("unable to open db connection", err)
+		return nil, errors.Wrap(err, "unable to open db connection")
 	}
 
 	builder := sq.StatementBuilder.PlaceholderFormat(sq.Question)
