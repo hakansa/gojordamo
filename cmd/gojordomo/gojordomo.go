@@ -45,7 +45,7 @@ func init() {
 func main() {
 	// Show version information
 	if *versionFlag {
-		fmt.Fprintln(os.Stdout, version.Print("license-controller"))
+		fmt.Fprintln(os.Stdout, version.Print("gojordomo"))
 		os.Exit(0)
 	}
 
