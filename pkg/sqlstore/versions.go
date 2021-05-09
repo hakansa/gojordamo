@@ -1,4 +1,4 @@
-package store
+package sqlstore
 
 import (
 	"github.com/blang/semver"
