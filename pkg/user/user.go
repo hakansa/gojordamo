@@ -31,6 +31,15 @@ type GetUsersResults struct {
 	Items      []User `json:"items"`
 }
 
+// Store defines the methods the ServiceImpl needs from the interfaceStore.
 type Store interface {
+
+	// GetUsers returns filtered users and the total count before paging.
 	GetUsers(options FilterOptions) (*GetUsersResults, error)
+
+	// CreateUser creates a new user
+	CreateUser(user *User) (*User, error)
+
+	// UpdateUser updates the given user
+	UpdateUser(user *User) (*User, error)
 }
