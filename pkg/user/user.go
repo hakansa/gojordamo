@@ -23,7 +23,7 @@ type User struct {
 }
 
 // GetUsersResults collects the results of the GetUsers call: the list of Users matching
-// the HeaderFilterOptions, and the TotalCount of the matching incidents before paging was applied.
+// the HeaderFilterOptions, and the TotalCount of the matching users before paging was applied.
 type GetUsersResults struct {
 	TotalCount int    `json:"total_count"`
 	PageCount  int    `json:"page_count"`
@@ -32,5 +32,5 @@ type GetUsersResults struct {
 }
 
 type Store interface {
-	GetUsers()
+	GetUsers(options FilterOptions) (*GetUsersResults, error)
 }
