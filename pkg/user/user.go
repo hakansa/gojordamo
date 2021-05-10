@@ -42,4 +42,10 @@ type Store interface {
 
 	// UpdateUser updates the given user
 	UpdateUser(user *User) (*User, error)
+
+	// GetUser gets a user by ID.
+	GetUser(id int) (*User, error)
+
+	// NukeDB removes all incident related data.
+	NukeDB() error
 }
