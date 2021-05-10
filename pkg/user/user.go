@@ -21,3 +21,16 @@ type User struct {
 	ConfirmationCode string    `json:"confirmation_code"`
 	EmailVerifiedAt  time.Time `json:"email_verified_at"`
 }
+
+// GetUsersResults collects the results of the GetUsers call: the list of Users matching
+// the HeaderFilterOptions, and the TotalCount of the matching incidents before paging was applied.
+type GetUsersResults struct {
+	TotalCount int    `json:"total_count"`
+	PageCount  int    `json:"page_count"`
+	HasMore    bool   `json:"has_more"`
+	Items      []User `json:"items"`
+}
+
+type Store interface {
+	GetUsers()
+}
