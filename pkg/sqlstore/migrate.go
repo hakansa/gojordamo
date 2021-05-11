@@ -6,14 +6,14 @@ import (
 )
 
 // Migrate runs migrate function for latest version upgrade
-func (sqlStore *SQLStore) Migrate(originalSchemaVersion semver.Version) error {
+func (s *SQLStore) Migrate(originalSchemaVersion semver.Version) error {
 	currentSchemaVersion := originalSchemaVersion
 	for _, migration := range migrations {
 		if !currentSchemaVersion.EQ(migration.fromVersion) {
 			continue
 		}
 
-		if err := sqlStore.migrate(migration); err != nil {
+		if err := s.migrate(migration); err != nil {
 			return err
 		}
 
@@ -23,18 +23,18 @@ func (sqlStore *SQLStore) Migrate(originalSchemaVersion semver.Version) error {
 	return nil
 }
 
-func (sqlStore *SQLStore) migrate(migration Migration) (err error) {
+func (s *SQLStore) migrate(migration Migration) (err error) {
 	tx, err := sqlStore.db.Beginx()
 	if err != nil {
 		return errors.Wrap(err, "could not begin transaction")
 	}
-	defer sqlStore.finalizeTransaction(tx)
+	defer s.finalizeTransaction(tx)
 
-	if err := migration.migrationFunc(tx, sqlStore); err != nil {
+	if err := migration.migrationFunc(tx, s); err != nil {
 		return errors.Wrapf(err, "error executing migration from version %s to version %s", migration.fromVersion.String(), migration.toVersion.String())
 	}
 
-	if err := sqlStore.SetCurrentVersion(tx, migration.toVersion); err != nil {
+	if err := s.SetCurrentVersion(tx, migration.toVersion); err != nil {
 		return errors.Wrapf(err, "failed to set the current version to %s", migration.toVersion.String())
 	}
 
@@ -44,16 +44,15 @@ func (sqlStore *SQLStore) migrate(migration Migration) (err error) {
 	return nil
 }
 
-// RunMigrations will run the migrations (if any). The caller should hold a cluster mutex if there
-// is a danger of this being run on multiple servers at once.
-func (sqlStore *SQLStore) RunMigrations() error {
-	currentSchemaVersion, err := sqlStore.GetCurrentVersion()
+// RunMigrations will run the migrations (if any).
+func (s *SQLStore) RunMigrations() error {
+	currentSchemaVersion, err := s.GetCurrentVersion()
 	if err != nil {
 		return errors.Wrapf(err, "failed to get the current schema version")
 	}
 
 	if currentSchemaVersion.LT(LatestVersion()) {
-		if err := sqlStore.Migrate(currentSchemaVersion); err != nil {
+		if err := s.Migrate(currentSchemaVersion); err != nil {
 			return errors.Wrapf(err, "failed to complete migrations")
 		}
 	}

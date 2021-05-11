@@ -6,8 +6,6 @@ type DBDriver string
 const (
 	// DBDriverMySQL is an enum for mysql driver
 	DBDriverMySQL DBDriver = "mysql"
-	// DBDriverPostgres is an enum for postgres driver
-	//DBDriverPostgres = "postgres"
 )
 
 // Default SQLSettings
