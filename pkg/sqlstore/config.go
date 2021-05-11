@@ -10,6 +10,17 @@ const (
 	//DBDriverPostgres = "postgres"
 )
 
+// Default SQLSettings
+const (
+	DefaultDBDriver                    = DBDriverMySQL
+	DefaultDataSource                  = ""
+	DefaultMaxIdleConns                = 20
+	DefaultMaxOpenConns                = 300
+	DefaultConnMaxLifetimeMilliseconds = 3600000
+	DefaultConnMaxIdleTimeMilliseconds = 300000
+	DefaultQueryTimeout                = 30
+)
+
 // MaxWriteLength defines the maximum length accepted for write to the Configurations or
 // ConfigurationFiles table.
 //
@@ -22,7 +33,8 @@ type Config struct {
 	DataSource string
 }
 
-type SqlSettings struct {
+// SQLSettings declares the sql database settings
+type SQLSettings struct {
 	DriverName                  string
 	DataSource                  string
 	MaxIdleConns                int
@@ -32,33 +44,34 @@ type SqlSettings struct {
 	QueryTimeout                int
 }
 
-func (s *SqlSettings) SetDefaults(isUpdate bool) {
+// SetDefaults sets the default settings if they are not setted
+func (s *SQLSettings) SetDefaults(isUpdate bool) {
 	if s.DriverName == "" {
 		s.DriverName = string(DBDriverMySQL)
 	}
 
 	if s.DataSource == "" {
-		s.DataSource = "" // TODO: DEFAULT DATASOURCE
+		s.DataSource = DefaultDataSource
 	}
 
 	if s.MaxIdleConns == 0 {
-		s.MaxIdleConns = 20
+		s.MaxIdleConns = DefaultMaxIdleConns
 	}
 
 	if s.MaxOpenConns == 0 {
-		s.MaxOpenConns = 300
+		s.MaxOpenConns = DefaultMaxOpenConns
 	}
 
 	if s.ConnMaxLifetimeMilliseconds == 0 {
-		s.ConnMaxLifetimeMilliseconds = 3600000
+		s.ConnMaxLifetimeMilliseconds = DefaultConnMaxLifetimeMilliseconds
 	}
 
 	if s.ConnMaxIdleTimeMilliseconds == 0 {
-		s.ConnMaxIdleTimeMilliseconds = 300000
+		s.ConnMaxIdleTimeMilliseconds = DefaultConnMaxIdleTimeMilliseconds
 	}
 
 	if s.QueryTimeout == 0 {
-		s.QueryTimeout = 30
+		s.QueryTimeout = DefaultQueryTimeout
 	}
 
 }
