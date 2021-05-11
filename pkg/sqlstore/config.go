@@ -31,6 +31,7 @@ const MaxWriteLength = 4 * 1024 * 1024
 type Config struct {
 	Driver     DBDriver
 	DataSource string
+	SQLSettings
 }
 
 // SQLSettings declares the sql database settings

@@ -5,13 +5,12 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// Migration declares the SQL migrations for updates
 type Migration struct {
 	fromVersion   semver.Version
 	toVersion     semver.Version
 	migrationFunc func(sqlx.Ext, *SQLStore) error
 }
-
-const MySQLCharset = "DEFAULT CHARACTER SET utf8mb4"
 
 var migrations = []Migration{
 	{

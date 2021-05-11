@@ -6,13 +6,11 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/blang/semver"
-	"github.com/golang/mock/gomock"
 	"github.com/mattermost/mattermost-server/v5/model"
 	"github.com/stretchr/testify/require"
 )
 
 func TestMigrationIdempotency(t *testing.T) {
-	mockCtrl := gomock.NewController(t)
 
 	for _, driver := range driverNames {
 		fmt.Println(driver)

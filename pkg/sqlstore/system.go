@@ -8,10 +8,10 @@ import (
 )
 
 // getSystemValue queries the IR_System table for the given key
-func (sqlStore *SQLStore) getSystemValue(q queryer, key string) (string, error) {
+func (s *SQLStore) getSystemValue(q queryer, key string) (string, error) {
 	var value string
 
-	err := sqlStore.getBuilder(q, &value,
+	err := s.getBuilder(q, &value,
 		sq.Select("SValue").
 			From("IR_System").
 			Where(sq.Eq{"SKey": key}),
@@ -26,12 +26,12 @@ func (sqlStore *SQLStore) getSystemValue(q queryer, key string) (string, error) 
 }
 
 // setSystemValue updates the IR_System table for the given key.
-func (sqlStore *SQLStore) setSystemValue(e queryExecer, key, value string) error {
+func (s *SQLStore) setSystemValue(e queryExecer, key, value string) error {
 	// MySQL reports 0 rows affected in the update below when the key and value
 	// already exist. We can use its native support for upsert instead. Postgres
 	// 9.4 does not have native support for upsert, but it reports 1 row
 	// affected even when the key and value are already present.
-	_, err := sqlStore.execBuilder(e,
+	_, err := s.execBuilder(e,
 		sq.Insert("IR_System").
 			Columns("SKey", "SValue").
 			Values(key, value).
